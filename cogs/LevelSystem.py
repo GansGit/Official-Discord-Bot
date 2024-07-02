@@ -53,7 +53,8 @@ class LevelSystem(ezcord.Cog):
                 
                 new_data = load_json()
                 if new_data[str(user_id)]['level'] > current_level:
-                    await message.channel.send(f'{message.author.mention} achieved a new level: {new_data[str(user_id)]['level']}')
+                    new_level = new_data[str(user_id)]['level']
+                    await message.channel.send(f'{message.author.mention} achieved a new level: {new_level}')
     
     @slash_command()
     async def level(self, ctx):
