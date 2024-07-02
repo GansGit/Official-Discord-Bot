@@ -41,14 +41,19 @@ class LevelSystem(ezcord.Cog):
         
         for channel in channels:
             if message.channel.id == channel:
-                random_xp = random.randint(25, 65)
+                random_xp = random.randint(15, 43)
                 data = load_json()
                 user_id = message.author.id
+                current_level = data[str(user_id)]['level']
                 
                 print('Received message: ' + message.content + ", xp: " + str(random_xp)) # Logging for control
 
                 data = add_or_update_xp(data=data, user_id=user_id, xp_to_add=random_xp)
                 save_json(data=data)
+                
+                new_data = load_json()
+                if new_data[str(user_id)]['level'] > current_level:
+                    await message.channel.send(f'{message.author.mention} achieved a new level: {new_data[str(user_id)]['level']}')
     
     @slash_command()
     async def level(self, ctx):
@@ -59,7 +64,7 @@ class LevelSystem(ezcord.Cog):
         
         
         current_level = get_user_level(ctx.author.id)
-        await ctx.respond(f"Your current level is: {current_level}")
+        await ctx.respond(f"Your current level is {current_level}!")
         
             
 def setup(bot):
