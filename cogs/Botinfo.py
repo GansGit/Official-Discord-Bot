@@ -34,6 +34,7 @@ class Botinfo(ezcord.Cog, emoji='🍪', description="Show information about the 
         )
         
         embed.add_field(name='Uptime', value=f'{uptime_text}', inline=True)
+        embed.add_field(name='Bot Version', value=f'{Config.get_config('bot')['version']}', inline=True)
         embed.add_field(name='Slash Commands', value=f'{slash_commands}', inline=True)
         embed.add_field(name='OS', value=platform.system(), inline=True)
         embed.add_field(name='OS Version', value=platform.version(), inline=True)
