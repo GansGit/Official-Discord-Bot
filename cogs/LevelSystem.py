@@ -9,7 +9,7 @@ import math
 
 from cogs.Config import Config
 
-class LevelSystem(ezcord.Cog):
+class LevelSystem(ezcord.Cog, emoji='✨'):
     @commands.Cog.listener()
     async def on_message(self, message : discord.Message):
         if message.author.bot:
@@ -41,7 +41,7 @@ class LevelSystem(ezcord.Cog):
         
         for channel in channels:
             if message.channel.id == channel:
-                random_xp = random.randint(15, 43)
+                random_xp = random.randint(5, 20)
                 data = load_json()
                 user_id = message.author.id
                 current_level = data[str(user_id)]['level']
@@ -56,7 +56,7 @@ class LevelSystem(ezcord.Cog):
                     new_level = new_data[str(user_id)]['level']
                     await message.channel.send(f'{message.author.mention} achieved a new level: {new_level}')
     
-    @slash_command()
+    @slash_command(description="Show's the current level.")
     async def level(self, ctx):
         def get_user_level(user_id):
             with open('levels.json', 'r') as file:

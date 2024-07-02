@@ -8,7 +8,7 @@ import json
 
 from cogs.Config import Config
 
-class Fun(ezcord.Cog):
+class Fun(ezcord.Cog, emoji='🐧'):
     @slash_command(description="Show's a random fact about anything in the world.")
     async def fact(self, ctx):
         api_url = f'https://api.api-ninjas.com/v1/facts'
@@ -20,13 +20,14 @@ class Fun(ezcord.Cog):
             
             data = json.loads(response.text)
             fact = data[0]['fact']
+            ft_text = Config.get_config('footer')['text']
             
             embed = discord.Embed(
                 title='Random Fact',
                 description=f'{fact}',
                 color=discord.Color.green()
             )
-            embed.set_footer(text=f'{Config.get_config('footer')['text']} - Fact by api-ninjas.com')
+            embed.set_footer(text=f'{ft_text} - Fact by api-ninjas.com')
             
             await ctx.respond(embed=embed)
 
