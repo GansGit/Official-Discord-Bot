@@ -6,6 +6,7 @@ import ezcord
 import json
 import random
 import math
+from easy_pil import Editor, load_image_async, Font
 
 from cogs.Config import Config
 
@@ -56,17 +57,45 @@ class LevelSystem(ezcord.Cog, emoji='✨'):
                     new_level = new_data[str(user_id)]['level']
                     await message.channel.send(f'{message.author.mention} achieved a new level: {new_level}')
     
-    @slash_command(description="Show's the current level.")
-    async def level(self, ctx):
+    @slash_command(name='rank', description="Show's the current rank.")
+    async def rank(self, ctx):
         def get_user_level(user_id):
             with open('levels.json', 'r') as file:
                 json_file =  json.load(file)
             return json_file[str(user_id)]['level']
         
-        
-        current_level = get_user_level(ctx.author.id)
-        await ctx.respond(f"Your current level is {current_level}!")
-        
+        def get_user_xp(user_id):
+            with open('levels.json', 'r') as file:
+                json_file = json.load(file)
+            return json_file[str(user_id)]['xp']
             
+        
+        await ctx.defer()
+        background = Editor("img/space.png").resize((800, 250))
+
+        avatar = await load_image_async(ctx.author.display_avatar.url)
+        circle_avatar = Editor(avatar).resize((200, 200)).circle_image()
+        
+        background.paste(circle_avatar, (25,25))
+        
+        current_xp = get_user_xp(ctx.author.id)
+        current_level = get_user_level(ctx.author.id)
+        
+        big_text = Font.poppins(size=50, variant="bold")
+        background.text((490, 50), f'{ctx.author.display_name}', color="white", font=big_text, align="center")
+        small_text = Font.poppins(size=30, variant='regular')
+        background.text(
+            (490, 125), f'Level: {current_level} XP: {current_xp}', color="#00ced1", font=small_text, align="center"
+        )
+        
+        
+        file = discord.File(fp=background.image_bytes, filename='rank.png')
+        
+        
+        await ctx.followup.send(file=file)
+        
+    
+    
+        
 def setup(bot):
     bot.add_cog(LevelSystem(bot))
