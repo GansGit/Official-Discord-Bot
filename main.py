@@ -29,6 +29,8 @@ if __name__ == "__main__":
     for filename in os.listdir("cogs"):
         if filename == 'Config.py':
             pass
+        elif filename == 'AcademyConfig.py':
+            pass
         elif filename.endswith(".py"):
             bot.load_extension(f"cogs.{filename[:-3]}")
             loaded_cogs = loaded_cogs + 1

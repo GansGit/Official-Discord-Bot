@@ -17,7 +17,15 @@ class LevelSystem(ezcord.Cog, emoji='✨'):
             return
         
         def xp_to_level(xp, k=100):
-            return int(math.sqrt(xp/k))
+            result = math.sqrt(xp/k)
+            
+            if result <= 0:
+                return 1
+            else:
+                if result > 1:
+                    return math.floor(result)
+                else:
+                    return 1
         
         def load_json():
             with open('levels.json', 'r') as file:
@@ -34,7 +42,7 @@ class LevelSystem(ezcord.Cog, emoji='✨'):
                 data[user_id_str]['level'] = xp_to_level(data[user_id_str]['xp'])
                 
             else:
-                data[user_id_str] = {'xp':xp_to_add, 'level':xp_to_level}
+                data[user_id_str] = {'xp':xp_to_add, 'level':1}
             return data
             
         channels = Config.get_config('level-system')['allowed-channels']
@@ -44,17 +52,19 @@ class LevelSystem(ezcord.Cog, emoji='✨'):
             if message.channel.id == channel:
                 random_xp = random.randint(5, 20)
                 data = load_json()
-                user_id = message.author.id
-                current_level = data[str(user_id)]['level']
+                user_id = str(message.author.id)
+                
                 
                 print('Received message: ' + message.content + ", xp: " + str(random_xp)) # Logging for control
-
+                
                 data = add_or_update_xp(data=data, user_id=user_id, xp_to_add=random_xp)
+                
                 save_json(data=data)
+                current_level = data[user_id]['level']
                 
                 new_data = load_json()
-                if new_data[str(user_id)]['level'] > current_level:
-                    new_level = new_data[str(user_id)]['level']
+                if new_data[user_id]['level'] > current_level:
+                    new_level = new_data[user_id]['level']
                     await message.channel.send(f'{message.author.mention} achieved a new level: {new_level}')
     
     @slash_command(name='rank', description="Show's the current rank.")

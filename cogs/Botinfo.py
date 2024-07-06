@@ -32,7 +32,6 @@ class Botinfo(ezcord.Cog, emoji='🍪', description="Show information about the 
         
         embed = discord.Embed(
             title='Bot Statistics',
-            description='Here are some general information about the bot',
             color=discord.Color.green()
         )
         

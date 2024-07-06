@@ -1,0 +1,8 @@
+{
+    "level-1":{
+        "module-1": {
+            "task":"Create a variable with the value hello and print it out!",
+            "result":"hello"
+        }
+    }
+}
