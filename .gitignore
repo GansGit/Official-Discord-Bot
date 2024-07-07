@@ -2,3 +2,5 @@ config.json
 /cogs/__pycache__
 *.pyc
 levels.json
+courses.json
+python.json

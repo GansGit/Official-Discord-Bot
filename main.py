@@ -2,7 +2,6 @@ import discord
 from discord.commands import Option
 import os
 from cogs.Config import Config
-
 import ezcord
 
 status = discord.Status.online

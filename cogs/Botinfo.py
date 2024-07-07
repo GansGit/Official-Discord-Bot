@@ -14,10 +14,8 @@ class Botinfo(ezcord.Cog, emoji='🍪', description="Show information about the 
         self.startTime = time.time() # creating a variable, that is counting the time since booting up
     
     # on_ready event 
-    @commands.Cog.listener()
-    async def on_ready(self):
-        print(f'Bot is now online!')
-            
+
+        
     @slash_command(description="Show's general information about the bot", name='botinfo')
     async def botinfo(self, ctx):
         # Uptime

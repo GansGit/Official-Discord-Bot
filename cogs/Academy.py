@@ -4,9 +4,13 @@ import ezcord
 from cogs.AcademyConfig import Config
 from cogs.Config import Config as BotConfig
 import json
+import ast
+import io
+from contextlib import redirect_stdout
 
 class Academy(ezcord.Cog, hidden=True):
     academy = SlashCommandGroup('academy', description='The Academy is the place where you can learn coding from Zero!')
+    lesson = academy.create_subgroup('lesson')
     
     def __init__(self, bot):
         super().__init__(bot)
@@ -15,18 +19,22 @@ class Academy(ezcord.Cog, hidden=True):
     @academy.command(description="Show's the profile of a user!")
     async def profile(self, ctx):
         user_id_str = str(ctx.user.id)
-        
         courses = self.config.load_config()
-        
         # Initialisiere value standardmäßig
         value = "No courses enrolled"
-        
         # Prüfe, ob die Benutzer-ID in der Konfiguration existiert
         if user_id_str in courses:
             data = courses[user_id_str].get('courses', [])
             
             if 'python' in data:
-                value = '<:python:1259196508906197054>'
+                level = courses[user_id_str].get('courses')['python']['level']
+                
+                if level >= 5:
+                    value = '<:py_rank_2:1259426955393241192>'
+                if level >= 10:
+                    value = '<:python:1259196508906197054>'
+                if level < 5:
+                    value = '<:py_rank_1:1259426957175685170>'
         
         embed = discord.Embed(
             title=f"{ctx.author.display_name}'s profile",
@@ -44,13 +52,13 @@ class Academy(ezcord.Cog, hidden=True):
             description='1. <:python:1259196508906197054> Python',
             color=discord.Color.blue()
         )
-        embed.set_footer(text=f'{BotConfig.get_config('footer')['text']} - Course Selection', icon_url=ctx.author.avatar.url)
+        embed.set_footer(text=f'Coding Soul - Course Selection', icon_url=self.bot.user.avatar.url)
         
         await ctx.respond(embed=embed, view=CourseView(self.config), ephemeral=True)
     
-    @academy.command(description="Show's your current lesson.")
+    @lesson.command(description="Show's your current lesson.", name='task')
     @discord.option('language', type=discord.SlashCommandOptionType.string)
-    async def lesson(self, ctx, language: str):
+    async def task(self, ctx, language: str):
         
         user_id_str = str(ctx.user.id)
         courses = self.config.load_config()
@@ -62,26 +70,32 @@ class Academy(ezcord.Cog, hidden=True):
             data = courses[user_id_str].get('courses', [])
             
             if language in data:
-                module = f'{data[language]['module']}'
-                level = f'{data[language]['level']}'
+                module = data[language]['module']
+                level = data[language]['level']
+                print(module)
+                print(level)
         
-            embed = discord.Embed(
-                title=f'Current lesson',
-                description=f'Language: {language}\nLevel: {level}\nModule: {module}',
-                color=discord.Color.blue()
-            )
-            embed.set_footer(text=f'{BotConfig.get_config('footer')['text']} - Lesson', icon_url=ctx.author.avatar.url)
-            
             with open(f'{language}.json', 'r') as f:
                 json_data = json.load(f)
-            task = json_data[f'level-{level}'][f'module-{module}']['task']
-            result = json_data[f'level-{level}'][f'module-{module}']['result']
             
-            modal = LessonModal(title='Lesson', task=task, result=result)
-            await ctx.send_modal(modal)
+            task = json_data[f'level-{level}'][f'module-{module}']['task']
+            
+            embed = discord.Embed(
+                title=f'Current lesson | {language}',
+                description=f"### Todo: {task}\n\n**Tip:** Prepare the code in your IDE. When you are finished, you enter: /academy lesson send and you'll get an Modal.",
+                color=discord.Color.blue()
+            )
+            embed.set_footer(text=f'Coding Soul - Lesson', icon_url=self.bot.user.avatar.url)
+            await ctx.respond(embed=embed, ephemeral=True)
         else:
             await ctx.respond('This course is not enrolled.')
+    
+    @lesson.command(description="Show's you a modal for entering your code!")
+    async def send(self, ctx):
         
+        result = "abc"
+        
+        await ctx.send_modal(LessonModal(title='Lesson', result=result))
     
 def setup(bot):
     bot.add_cog(Academy(bot))
@@ -97,15 +111,55 @@ class CourseView(discord.ui.View):
         await interaction.response.send_message('Python Course was added to your courses!', ephemeral=True)
 
 class LessonModal(discord.ui.Modal):
-    def __init__(self, task, result, *args, **kwargs):
+    def __init__(self, result, *args, **kwargs):
         super().__init__(
             discord.ui.InputText(
-                label=f'Task:',
-                placeholder=f"Do not delete: {task}",
-                style=discord.InputTextStyle.long,
-                required=False
-            ), discord.ui.InputText(
                 label=f'Solution',
-                placeholder='Print the code out here!'
+                placeholder='Print the code out here!',
+                style=discord.InputTextStyle.long
             )
             ,*args, **kwargs)
+        self.solution = result
+        
+    async def callback(self, interaction):
+        code = self.children[0].value
+        exec_code = self.run_user_code(code=code)
+        
+        print(exec_code)
+        
+        if exec_code == self.solution:
+            print("Super")
+        else:
+            print("Not super")
+    
+    def is_code_safe(self, code):
+        try:
+            tree = ast.parse(code)
+            for node in ast.walk(tree):
+                if isinstance(node, ast.Import) or isinstance(node, ast.ImportFrom):
+                    return False
+
+                if isinstance(node, ast.Call) and isinstance(node.func, ast.Name):
+                    if node.func.id in {'exec', 'eval', 'compile', 'open', 'os.system'}:
+                        return False
+
+                if isinstance(node, ast.Attribute):
+                    if isinstance(node.value, ast.Name) and node.value.id in {'os', 'sys'}:
+                        return False
+
+            return True
+        except SyntaxError:
+            return False
+        
+    def run_user_code(self, code):
+        if self.is_code_safe(code):
+            try:
+                f = io.StringIO()
+                with redirect_stdout(f):
+                    exec(code)
+                return f.getvalue()
+                
+            except Exception as e:
+                return f"Error in code execution: {str(e)}"
+        else:
+            return "Code contains unsafe operations and cannot be executed."

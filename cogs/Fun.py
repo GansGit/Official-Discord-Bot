@@ -5,6 +5,7 @@ import discord
 import ezcord
 import requests
 import json
+import http.client
 
 from cogs.Config import Config
 
@@ -30,6 +31,6 @@ class Fun(ezcord.Cog, emoji='🐧'):
             embed.set_footer(text=f'{ft_text} - Fact by api-ninjas.com')
             
             await ctx.respond(embed=embed)
-
+            
 def setup(bot):
     bot.add_cog(Fun(bot))
