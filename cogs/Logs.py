@@ -29,6 +29,8 @@ class Logs(commands.Cog):
         log_channel = await self.bot.fetch_channel(Config.get_config('log')['channel'])
         await log_channel.send(embed=embed)
         await member.add_roles(member.guild.get_role(1256611699230904350))
+        await member.add_roles(member.guild.get_role(1260600394460172389))
+        await member.add_roles(member.guild.get_role(1260600444271460444))
     
     @commands.Cog.listener()
     async def on_member_remove(self, member):
