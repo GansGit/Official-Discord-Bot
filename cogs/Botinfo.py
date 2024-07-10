@@ -40,7 +40,7 @@ class Botinfo(ezcord.Cog, emoji='🍪', description="Show information about the 
         embed.add_field(name='OS Version', value=platform.version(), inline=True)
         embed.set_footer(text=Config.get_config('footer')['text'] + " - Botinfo", icon_url=ctx.author.avatar)
                 
-        await ctx.respond(embed=embed)
+        await ctx.respond(embed=embed, ephemeral=True)
            
 def setup(bot):
     bot.add_cog(Botinfo(bot))

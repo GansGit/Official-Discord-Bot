@@ -91,7 +91,7 @@ class Academy(ezcord.Cog, hidden=True):
             await ctx.respond('This course is not enrolled.')
     
     @lesson.command(description="Show's you a modal for entering your code!")
-    async def send(self, ctx):
+    async def solve(self, ctx):
         
         result = "abc"
         
@@ -122,44 +122,4 @@ class LessonModal(discord.ui.Modal):
         self.solution = result
         
     async def callback(self, interaction):
-        code = self.children[0].value
-        exec_code = self.run_user_code(code=code)
-        
-        print(exec_code)
-        
-        if exec_code == self.solution:
-            print("Super")
-        else:
-            print("Not super")
-    
-    def is_code_safe(self, code):
-        try:
-            tree = ast.parse(code)
-            for node in ast.walk(tree):
-                if isinstance(node, ast.Import) or isinstance(node, ast.ImportFrom):
-                    return False
-
-                if isinstance(node, ast.Call) and isinstance(node.func, ast.Name):
-                    if node.func.id in {'exec', 'eval', 'compile', 'open', 'os.system'}:
-                        return False
-
-                if isinstance(node, ast.Attribute):
-                    if isinstance(node.value, ast.Name) and node.value.id in {'os', 'sys'}:
-                        return False
-
-            return True
-        except SyntaxError:
-            return False
-        
-    def run_user_code(self, code):
-        if self.is_code_safe(code):
-            try:
-                f = io.StringIO()
-                with redirect_stdout(f):
-                    exec(code)
-                return f.getvalue()
-                
-            except Exception as e:
-                return f"Error in code execution: {str(e)}"
-        else:
-            return "Code contains unsafe operations and cannot be executed."
+        pass
