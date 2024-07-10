@@ -112,6 +112,7 @@ class Academy(ezcord.Cog, hidden=True):
             color=discord.Colour.blurple()
         )
         embed.set_thumbnail(url=image_link)
+        embed.set_footer(text='Coding Soul - Academy Ressources', icon_url=BotConfig.get_config('footer')['icon-url'])
         
         await ctx.respond(embed=embed, ephemeral=True)        
 def setup(bot):
