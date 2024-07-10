@@ -57,8 +57,7 @@ class Academy(ezcord.Cog, hidden=True):
         await ctx.respond(embed=embed, view=CourseView(self.config), ephemeral=True)
     
     @lesson.command(description="Show's your current lesson.", name='task')
-    @discord.option('language', type=discord.SlashCommandOptionType.string)
-    async def task(self, ctx, language: str):
+    async def task(self, ctx: discord.ApplicationContext, language: discord.Option(str, choices=['python'])): # type: ignore
         
         user_id_str = str(ctx.user.id)
         courses = self.config.load_config()
@@ -77,16 +76,19 @@ class Academy(ezcord.Cog, hidden=True):
         
             with open(f'{language}.json', 'r') as f:
                 json_data = json.load(f)
-            
-            task = json_data[f'level-{level}'][f'module-{module}']['task']
-            
-            embed = discord.Embed(
+            try:
+                task = json_data[f'level-{level}'][f'module-{module}']['task']
+                embed = discord.Embed(
                 title=f'Current lesson | {language}',
-                description=f"### Todo: {task}\n\n**Tip:** Prepare the code in your IDE. When you are finished, you enter: /academy lesson send and you'll get an Modal.",
+                description=f"### Todo: {task}\n\n**Tip:** Prepare the code in your IDE. When you are finished, you enter: /academy lesson solve and you'll get an Modal.",
                 color=discord.Color.blue()
-            )
-            embed.set_footer(text=f'Coding Soul - Lesson', icon_url=self.bot.user.avatar.url)
-            await ctx.respond(embed=embed, ephemeral=True)
+                )
+                embed.set_footer(text=f'Coding Soul - Lesson', icon_url=self.bot.user.avatar.url)
+                await ctx.respond(embed=embed, ephemeral=True)
+            except KeyError:
+                await ctx.respond("You've reached the final level! :tada:", ephemeral=True)
+            
+
         else:
             await ctx.respond('This course is not enrolled.')
     
@@ -96,7 +98,7 @@ class Academy(ezcord.Cog, hidden=True):
         result = "abc"
         
         await ctx.send_modal(LessonModal(title='Lesson', result=result))
-    
+        
 def setup(bot):
     bot.add_cog(Academy(bot))
 
