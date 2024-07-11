@@ -56,7 +56,9 @@ class Logs(commands.Cog):
     async def on_guild_channel_delete(self, channel):
         await self.updater.update()
     
-    
+    @commands.Cog.listener()
+    async def on_guild_role_create(self, role):
+        await self.updater.update()
         
 def setup(bot):
     bot.add_cog(Logs(bot))
