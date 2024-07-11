@@ -39,4 +39,13 @@ class RequirementView(discord.ui.View):
     async def select_callback(self, select, interaction):
         position = select.values[0]
         
-        await interaction.response.send_message(f'Requirements for {position}:\n', ephemeral=True)
+        if position == 'Moderator':
+            req = "- Min. 16y/o\n- Experience in Moderating\n- Motivation to work\n- Friendly and helpful"
+        
+        embed=discord.Embed(
+            title=f'Requirements for {position}',
+            color=discord.Colour.blurple(),
+            description=f"{req}"
+        )
+        
+        await interaction.response.send_message(embed=embed, ephemeral=True)
