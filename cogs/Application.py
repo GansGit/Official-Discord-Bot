@@ -17,6 +17,9 @@ class Application(ezcord.Cog):
         
         await ctx.respond(embed=embed, ephemeral=True, view=RequirementView())
     
+    @application.command(description="Send your application")
+    async def send(self, ctx):
+        await ctx.send_modal(ApplicationModal(title="Application"))
     
 def setup(bot):
     bot.add_cog(Application(bot))
@@ -55,3 +58,30 @@ class RequirementView(discord.ui.View):
         )
         
         await interaction.response.send_message(embed=embed, ephemeral=True)
+class ApplicationModal(discord.ui.Modal):
+    def __init__(self, *args, **kwargs):
+        super().__init__(
+            discord.ui.InputText(
+                label=f'POSITION',
+                placeholder='On which role are you applying to?',
+                style=discord.InputTextStyle.short
+            ),
+            discord.ui.InputText(
+                label=f'Personal Statement',
+                placeholder='Write down your Personal Statement (Why are you applying for / and so on...).',
+                style=discord.InputTextStyle.long
+            ),
+            discord.ui.InputText(
+                label=f'Strengths',
+                placeholder='Tell us something about your strengths.',
+                style=discord.InputTextStyle.long
+            ),
+            discord.ui.InputText(
+                label=f'Weaknesses',
+                placeholder='Tell us something about your weaknesses.',
+                style=discord.InputTextStyle.long
+            ),
+            *args, **kwargs)
+        
+    async def callback(self, interaction):
+        pass
