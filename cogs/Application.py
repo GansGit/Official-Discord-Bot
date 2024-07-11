@@ -40,7 +40,13 @@ class RequirementView(discord.ui.View):
         position = select.values[0]
         
         if position == 'Moderator':
-            req = "- Min. 16y/o\n- Experience in Moderating\n- Motivation to work\n- Friendly and helpful"
+            req = "* Min. 16y/o\n* Experience in Moderating\n* Motivation to work\n* Friendly and helpful"
+        elif position == 'Developer':
+            req = "* Min. 16y/o\n* Basics of Progamming\n* One of the following languages: Python or JavaScript\nAdditional skills are necessary"
+        elif position == 'Creator':
+            req = "* Min. \n    50 Followers on Twich /\n    500 on Instagram /\n    1000 on YouTube"
+        elif position == 'Partner':
+            req = "* Not available yet"
         
         embed=discord.Embed(
             title=f'Requirements for {position}',
