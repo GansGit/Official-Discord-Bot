@@ -109,5 +109,5 @@ class ApplicationModal(discord.ui.Modal):
         await channel.send(embed=embed_strengths)
         await channel.send(embed=embed_weaknesses)
         
-        await interaction.response.send_message('Application was successfully sent.')
+        await interaction.response.send_message('Application was successfully sent.', ephemeral=True)
         
