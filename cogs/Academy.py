@@ -106,15 +106,9 @@ class Academy(ezcord.Cog, hidden=True):
             repo_link = 'https://github.com/Coding-Soul/Python-Ressources'
             image_link = 'https://media.discordapp.net/attachments/1259158345760243765/1260589734757924924/python_logo.png?ex=668fdf2d&is=668e8dad&hm=e19afe81586d1b896f1d33f5e6cf0fc2e5691372867ad010d7398fb56ab0cffa&=&format=webp&quality=lossless&width=385&height=385'
         
-        embed = discord.Embed(
-            title=f'Ressources for {language}',
-            description=f"Hey {ctx.author.display_name}\nYou'll find ressources for {language} [here]({repo_link})",
-            color=discord.Colour.blurple()
-        )
-        embed.set_thumbnail(url=image_link)
-        embed.set_footer(text='Coding Soul - Academy Ressources', icon_url=BotConfig.get_config('footer')['icon-url'])
-        
-        await ctx.respond(embed=embed, ephemeral=True)        
+       
+            await ctx.respond("Python Ressources: <:python:1259196508906197054>", ephemeral=True, view=PythonRessourceView())
+                    
 def setup(bot):
     bot.add_cog(Academy(bot))
 
@@ -141,3 +135,28 @@ class LessonModal(discord.ui.Modal):
         
     async def callback(self, interaction):
         pass
+class PythonRessourceView(discord.ui.View):
+    
+    options = [
+        discord.SelectOption(label='Basics', description='Basics of python', emoji='<:python:1259196508906197054>')
+    ]
+    
+    @discord.ui.select(
+        min_values=1,
+        max_values=1,
+        placeholder='Select category',
+        options=options
+    )
+    async def select_callback(self, select, interaction):
+        category = select.values[0]
+        
+        if category == 'Basics':
+            embed = discord.Embed(
+                title=f'Ressources for Python',
+                description=f"Hey {interaction.user.mention}\nYou'll find ressources for Python basics [here](https://github.com/Coding-Soul/Python-Ressources). Dont forget to star it ;)",
+                color=discord.Colour.blurple()
+            )
+            embed.set_thumbnail(url='https://media.discordapp.net/attachments/1259158345760243765/1260589734757924924/python_logo.png?ex=668fdf2d&is=668e8dad&hm=e19afe81586d1b896f1d33f5e6cf0fc2e5691372867ad010d7398fb56ab0cffa&=&format=webp&quality=lossless&width=385&height=385')
+            embed.set_footer(text='Coding Soul - Academy Ressources', icon_url=BotConfig.get_config('footer')['icon-url'])
+             
+        await interaction.response.send_message(embed=embed, ephemeral=True)
