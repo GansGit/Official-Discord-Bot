@@ -19,7 +19,7 @@ class Application(ezcord.Cog):
     
     @application.command(description="Send your application")
     async def send(self, ctx):
-        await ctx.send_modal(ApplicationModal(title="Application"))
+        await ctx.send_modal(ApplicationModal(title="Application", bot=self.bot))
     
 def setup(bot):
     bot.add_cog(Application(bot))
@@ -59,7 +59,7 @@ class RequirementView(discord.ui.View):
         
         await interaction.response.send_message(embed=embed, ephemeral=True)
 class ApplicationModal(discord.ui.Modal):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, bot, **kwargs):
         super().__init__(
             discord.ui.InputText(
                 label=f'POSITION',
@@ -68,7 +68,7 @@ class ApplicationModal(discord.ui.Modal):
             ),
             discord.ui.InputText(
                 label=f'Personal Statement',
-                placeholder='Write down your Personal Statement (Why are you applying for / and so on...).',
+                placeholder='Write down your Personal Statement (Describe yourself / e.g. age / motivation etc...).',
                 style=discord.InputTextStyle.long
             ),
             discord.ui.InputText(
@@ -78,10 +78,36 @@ class ApplicationModal(discord.ui.Modal):
             ),
             discord.ui.InputText(
                 label=f'Weaknesses',
-                placeholder='Tell us something about your weaknesses.',
+                placeholder='Tell us something about your- weaknesses.',
                 style=discord.InputTextStyle.long
             ),
             *args, **kwargs)
+        self.bot = bot
         
     async def callback(self, interaction):
-        pass
+        channel = await self.bot.fetch_channel(1261658865129226240)
+        
+        embed_personal_statement = discord.Embed(
+            title='Personal Statement',
+            color=discord.Colour.blurple(),
+            description=f'{self.children[1].value}'
+        )
+        
+        embed_strengths = discord.Embed(
+            title='Strengths',
+            color=discord.Colour.blurple(),
+            description=f'{self.children[2].value}'
+        )
+        
+        embed_weaknesses = discord.Embed(
+            title='Weaknesses',
+            color=discord.Colour.blurple(),
+            description=f'{self.children[3].value}'
+        )
+        
+        await channel.send(f"Application by: {interaction.user.mention} / For: {self.children[0].value}", embed=embed_personal_statement)
+        await channel.send(embed=embed_strengths)
+        await channel.send(embed=embed_weaknesses)
+        
+        await interaction.response.send_message('Application was successfully sent.')
+        
