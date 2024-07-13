@@ -27,10 +27,10 @@ def setup(bot):
 class RequirementView(discord.ui.View):
     
     options = [
-        discord.SelectOption(label='Moderator', description='Moderate the chat', emoji='👮'),
-        discord.SelectOption(label='Developer', description='Develope on the system', emoji='<:python:1259196508906197054>'),
-        discord.SelectOption(label='Creator', description='Promote your social media', emoji='📣'),
-        discord.SelectOption(label='Partner', description='Promote your discord server', emoji='🤝')
+        discord.SelectOption(label='Moderator - Open', description='Moderate the chat', emoji='👮'),
+        discord.SelectOption(label='Developer - Closed', description='Develope on the system', emoji='<:python:1259196508906197054>'),
+        discord.SelectOption(label='Creator - Open', description='Promote your social media', emoji='📣'),
+        discord.SelectOption(label='Partner - Open', description='Promote your discord server', emoji='🤝')
     ]
     
     @discord.ui.select(
