@@ -103,10 +103,6 @@ class Academy(ezcord.Cog, hidden=True):
     async def ressources(self, ctx: discord.ApplicationContext, language: discord.Option(str, choices=['Python'])): # type: ignore
         
         if language == 'Python':
-            repo_link = 'https://github.com/Coding-Soul/Python-Ressources'
-            image_link = 'https://media.discordapp.net/attachments/1259158345760243765/1260589734757924924/python_logo.png?ex=668fdf2d&is=668e8dad&hm=e19afe81586d1b896f1d33f5e6cf0fc2e5691372867ad010d7398fb56ab0cffa&=&format=webp&quality=lossless&width=385&height=385'
-        
-       
             await ctx.respond("Python Ressources: <:python:1259196508906197054>", ephemeral=True, view=PythonRessourceView())
                     
 def setup(bot):
