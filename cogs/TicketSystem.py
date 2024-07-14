@@ -5,13 +5,21 @@ from discord.ext import commands
 
 
 class TicketSystem(ezcord.Cog, hidden=True):
-    @commands.Cog.listeners()
+    @commands.Cog.listener()
     async def on_ready(self):
         self.bot.add_view(TicketView())
 
     @slash_command()
-    async def setup_ticket(self, ctx):
-        pass
+    @discord.default_permissions(administrator=True)
+    async def setup_ticket(self, ctx: discord.ApplicationContext):
+        embed = discord.Embed(
+            title='Ticket System',
+            color=discord.Colour.green(),
+            description='Select the type of the ticket you want to create:'
+        )
+
+        await ctx.send(embed=embed, view=TicketView())
+
 
 def setup(bot):
     bot.add_cog(TicketSystem(bot))
