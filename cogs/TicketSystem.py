@@ -32,10 +32,14 @@ class TicketSystem(ezcord.Cog, hidden=True):
     @discord.default_permissions(administrator=True)
     async def close(self, ctx: discord.ApplicationContext):
         channel = ctx.channel
-        await ctx.defer()
-        await channel.send('Text channel will be deleted in 10 seconds!')
-        await asyncio.sleep(10)
-        await channel.delete()
+
+        if channel.name.startswith('support-') or channel.name.startswith('bug-'):
+            await ctx.defer()
+            await channel.send('Text channel will be deleted in 10 seconds!')
+            await asyncio.sleep(10)
+            await channel.delete()
+        else:
+            await ctx.send('This channel cant be deleted!')
 
 
 def setup(bot):
