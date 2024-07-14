@@ -1,4 +1,4 @@
-from discord.commands import slash_command
+from discord.commands import slash_command, SlashCommandGroup
 import ezcord
 import discord
 from discord.ext import commands
@@ -6,15 +6,16 @@ from cogs.Config import Config
 
 
 class TicketSystem(ezcord.Cog, hidden=True):
+    ticket = SlashCommandGroup("ticket", description="Commands of the ticket system")
     @commands.Cog.listener()
     async def on_ready(self):
         view = TicketView()
         self.bot.add_view(view)
         print(f'Bot is ready. Loaded persistent views.')
 
-    @slash_command()
+    @ticket.command()
     @discord.default_permissions(administrator=True)
-    async def setup_ticket(self, ctx: discord.ApplicationContext):
+    async def setup(self, ctx: discord.ApplicationContext):
         embed = discord.Embed(
             title='Ticket System',
             color=discord.Colour.green(),
