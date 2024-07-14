@@ -75,7 +75,7 @@ class TicketView(discord.ui.View):
 
         existing_channel = discord.utils.get(guild.text_channels, name=channel_name)
         if existing_channel:
-            await interaction.response.send_message(f'A channel with the name {channel_name} already exists.',
+            await interaction.response.send_message(f'A channel with the name {channel_name} was already exists.',
                                                     ephemeral=True)
             return
 
@@ -94,4 +94,4 @@ class TicketView(discord.ui.View):
         )
 
         await channel.send(f"{interaction.user.mention}", embed=embed)
-        await interaction.response.send_message(f'Ticket channel {channel_name} created.', ephemeral=True)
+        await interaction.response.send_message(f'Ticket channel {channel_name} was created.', ephemeral=True)
