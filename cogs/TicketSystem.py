@@ -31,14 +31,19 @@ class TicketView(discord.ui.View):
 
     @discord.ui.button(label='Support', style=discord.ButtonStyle.primary, emoji='👮', custom_id='ticket-support-btn')
     async def button_callback(self, button, interaction: discord.Interaction):
-        guild = interaction.guild
-        channel: discord.TextChannel = await guild.create_text_channel(name=f'support-{interaction.user.id}')
+        guild = interaction.guild # guild
+        overwrites = { # permissions
+            guild.default_role: discord.PermissionOverwrite(read_messages=False),
+            interaction.user: discord.PermissionOverwrite(read_messages=True, send_messages=True)
+        }
+        category = discord.utils.get(guild.categories, id=1256616177887875153) # category id
+        channel: discord.TextChannel = await guild.create_text_channel(name=f'support-{interaction.user.id}', overwrites=overwrites, category=category)
 
         embed = discord.Embed(
             title='New Ticket created',
-            description=f'Hey {interaction.user.mention}! Your Support-Ticket was successfully created. (Enter your '
+            description=f'Your Support-Ticket was successfully created. (Enter your '
                         f'Question / etc..)',
             color=discord.Color.brand_green()
         )
 
-        await channel.send(embed=embed)
+        await channel.send(f"{interaction.user.mention}", embed=embed)
