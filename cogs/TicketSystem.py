@@ -7,6 +7,7 @@ from cogs.Config import Config
 
 class TicketSystem(ezcord.Cog, hidden=True):
     ticket = SlashCommandGroup("ticket", description="Commands of the ticket system")
+
     @commands.Cog.listener()
     async def on_ready(self):
         view = TicketView()
@@ -25,6 +26,11 @@ class TicketSystem(ezcord.Cog, hidden=True):
 
         await ctx.send(embed=embed, view=TicketView())
         await ctx.respond('Made successfully a setup of the ticket system.', ephemeral=True)
+
+    @ticket.command()
+    @discord.default_permissions(administrator=True)
+    async def close(self, ctx):
+        pass
 
 def setup(bot):
     bot.add_cog(TicketSystem(bot))
