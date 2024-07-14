@@ -1,10 +1,13 @@
 from discord.commands import slash_command
 import ezcord
 import discord
+from discord.ext import commands
 
 
 class TicketSystem(ezcord.Cog, hidden=True):
-    pass
+    @commands.Cog.listeners()
+    async def on_ready(self):
+        self.bot.add_view(TicketView())
 
 
 def setup(bot):
