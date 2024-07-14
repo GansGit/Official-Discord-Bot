@@ -26,8 +26,11 @@ class Botinfo(ezcord.Cog, emoji='🍪', description="Show information about the 
         slash_commands = len(self.bot.application_commands)
         # Bot Version
         bot_version = Config.get_config('bot')['version']
-        
-        
+        # Github Button
+        bot_btn = discord.ui.Button(label='Github', url='https://github.com/Coding-Soul', emoji='<:github:1259196523779194991>')
+        view = discord.ui.View()
+        view.add_item(bot_btn)
+
         embed = discord.Embed(
             title='Bot Statistics',
             color=discord.Color.green()
@@ -40,7 +43,7 @@ class Botinfo(ezcord.Cog, emoji='🍪', description="Show information about the 
         embed.add_field(name='OS Version', value=platform.version(), inline=True)
         embed.set_footer(text=Config.get_config('footer')['text'] + " - Botinfo", icon_url=ctx.author.avatar)
                 
-        await ctx.respond(embed=embed, ephemeral=True)
+        await ctx.respond(embed=embed, ephemeral=True, view=view)
            
 def setup(bot):
     bot.add_cog(Botinfo(bot))
