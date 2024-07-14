@@ -6,7 +6,7 @@ from cogs.Config import Config as BotConfig
 import json
 import ast
 import io
-from contextlib import redirect_stdout
+import contextlib
 
 class Academy(ezcord.Cog, hidden=True):
     academy = SlashCommandGroup('academy', description='The Academy is the place where you can learn coding from Zero!')
@@ -131,6 +131,8 @@ class LessonModal(discord.ui.Modal):
         
     async def callback(self, interaction):
         pass
+    
+    
 class PythonRessourceView(discord.ui.View):
     
     options = [
@@ -149,7 +151,7 @@ class PythonRessourceView(discord.ui.View):
         if category == 'Basics':
             embed = discord.Embed(
                 title=f'Ressources for Python',
-                description=f"Hey {interaction.user.mention}\nYou'll find ressources for Python basics [here](https://github.com/Coding-Soul/Python-Ressources). Dont forget to star it ;)",
+                description=f"Hey {interaction.user.mention}\nYou'll find ressources for Python basics [here](https://github.com/Coding-Soul/Python-Ressources). Dont forget to star it <:github:1259196523779194991>",
                 color=discord.Colour.blurple()
             )
             embed.set_thumbnail(url='https://media.discordapp.net/attachments/1259158345760243765/1260589734757924924/python_logo.png?ex=668fdf2d&is=668e8dad&hm=e19afe81586d1b896f1d33f5e6cf0fc2e5691372867ad010d7398fb56ab0cffa&=&format=webp&quality=lossless&width=385&height=385')
