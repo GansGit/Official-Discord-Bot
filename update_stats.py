@@ -20,6 +20,7 @@ class Updater():
                 color=discord.Color.green()
             )
             embed.add_field(name='Members', value=f"{channel.guild.member_count - bots}", inline=False)
+            embed.add_field(name='Bots', value=f"{bots}", inline=False)
             embed.add_field(name='Text channels', value=len(channel.guild.text_channels), inline=False)
             embed.add_field(name='Voice channels', value=len(channel.guild.voice_channels), inline=False)
             embed.add_field(name='Roles', value=len(channel.guild.roles), inline=False)
