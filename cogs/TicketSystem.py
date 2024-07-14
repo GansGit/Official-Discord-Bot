@@ -7,7 +7,9 @@ from discord.ext import commands
 class TicketSystem(ezcord.Cog, hidden=True):
     @commands.Cog.listener()
     async def on_ready(self):
-        self.bot.add_view(TicketView())
+        view = TicketView()
+        self.bot.add_view(view)
+        print(f'Bot is ready. Loaded persistent views.')
 
     @slash_command()
     @discord.default_permissions(administrator=True)
@@ -19,6 +21,7 @@ class TicketSystem(ezcord.Cog, hidden=True):
         )
 
         await ctx.send(embed=embed, view=TicketView())
+        await ctx.send('Made successfully a setup of the ticket system.')
 
 
 def setup(bot):
@@ -26,24 +29,30 @@ def setup(bot):
 
 
 class TicketView(discord.ui.View):
-    def __int__(self):
+    def __init__(self):
         super().__init__(timeout=None)
 
-    @discord.ui.button(label='Support', style=discord.ButtonStyle.primary, emoji='👮', custom_id='ticket-support-btn')
-    async def button_callback(self, button, interaction: discord.Interaction):
-        guild = interaction.guild # guild
-        overwrites = { # permissions
+        self.support_button = discord.ui.Button(label='Support', custom_id='ticket_support_btn',
+                                                style=discord.ButtonStyle.primary, emoji='👮')
+        self.support_button.callback = self.support_btn_callback
+        self.add_item(self.support_button)
+
+    async def support_btn_callback(self, interaction: discord.Interaction):
+        guild = interaction.guild
+        overwrites = {
             guild.default_role: discord.PermissionOverwrite(read_messages=False),
             interaction.user: discord.PermissionOverwrite(read_messages=True, send_messages=True)
         }
-        category = discord.utils.get(guild.categories, id=1256616177887875153) # category id
-        channel: discord.TextChannel = await guild.create_text_channel(name=f'support-{interaction.user.id}', overwrites=overwrites, category=category)
+        category = discord.utils.get(guild.categories, id=1256616177887875153)
+        channel: discord.TextChannel = await guild.create_text_channel(name=f'support-{interaction.user.id}',
+                                                                       overwrites=overwrites, category=category)
 
         embed = discord.Embed(
             title='New Ticket created',
-            description=f'Your Support-Ticket was successfully created. (Enter your '
-                        f'Question / etc..)',
+            description=f'Your Support-Ticket was successfully created. (Enter your Question / etc..)',
             color=discord.Color.brand_green()
         )
 
         await channel.send(f"{interaction.user.mention}", embed=embed)
+        await interaction.response.send_message(f'Ticket was successfully created. Go to <#{channel.id}>!',
+                                                ephemeral=True)
