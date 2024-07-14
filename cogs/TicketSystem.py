@@ -35,8 +35,12 @@ class TicketView(discord.ui.View):
 
         self.support_button = discord.ui.Button(label='Support', custom_id='ticket_support_btn',
                                                 style=discord.ButtonStyle.primary, emoji='👮')
+        self.report_bug_button = discord.ui.Button(label='Report Bug', custom_id='ticket_report_bug_btn',
+                                                   style=discord.ButtonStyle.primary, emoji='🤯')
         self.support_button.callback = self.support_button_callback
+        self.report_bug_button.callback = self.report_bug_button_callback
         self.add_item(self.support_button)
+        self.add_item(self.report_bug_button)
 
     async def support_button_callback(self, interaction: discord.Interaction):
         guild = interaction.guild
