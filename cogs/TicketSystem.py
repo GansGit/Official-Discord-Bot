@@ -3,6 +3,7 @@ import ezcord
 import discord
 from discord.ext import commands
 from cogs.Config import Config
+import asyncio
 
 
 class TicketSystem(ezcord.Cog, hidden=True):
@@ -29,8 +30,12 @@ class TicketSystem(ezcord.Cog, hidden=True):
 
     @ticket.command()
     @discord.default_permissions(administrator=True)
-    async def close(self, ctx):
-        pass
+    async def close(self, ctx: discord.ApplicationContext):
+        channel = ctx.channel
+        await channel.send('Text channel will be deleted in 10 seconds!')
+        await asyncio.sleep(10)
+        await channel.delete()
+
 
 def setup(bot):
     bot.add_cog(TicketSystem(bot))
