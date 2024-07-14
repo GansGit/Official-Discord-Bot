@@ -2,7 +2,7 @@ from discord.commands import slash_command
 import ezcord
 import discord
 from discord.ext import commands
-
+from cogs.Config import Config
 
 class TicketSystem(ezcord.Cog, hidden=True):
     @commands.Cog.listener()
@@ -17,8 +17,9 @@ class TicketSystem(ezcord.Cog, hidden=True):
         embed = discord.Embed(
             title='Ticket System',
             color=discord.Colour.green(),
-            description='Select the type of the ticket you want to create:'
+            description='Select the type of the ticket you want to create'
         )
+        embed.set_footer(text='Coding Soul - TicketSystem', icon=Config.get_config('footer')['icon-url'])
 
         await ctx.send(embed=embed, view=TicketView())
         await ctx.send('Made successfully a setup of the ticket system.')
