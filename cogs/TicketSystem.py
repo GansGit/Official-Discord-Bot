@@ -28,7 +28,7 @@ class TicketSystem(ezcord.Cog, hidden=True):
         await ctx.send(embed=embed, view=TicketView())
         await ctx.respond('Made successfully a setup of the ticket system.', ephemeral=True)
 
-    @ticket.command()
+    @ticket.command(description='Closes a Ticket.')
     @discord.default_permissions(administrator=True)
     async def close(self, ctx: discord.ApplicationContext):
         channel = ctx.channel
