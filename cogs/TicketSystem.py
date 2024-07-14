@@ -71,7 +71,7 @@ class TicketView(discord.ui.View):
 
     async def report_bug_button_callback(self, interaction: discord.Interaction):
         guild = interaction.guild
-        channel_name = f'support-{interaction.user.id}'
+        channel_name = f'bug-{interaction.user.id}'
 
         existing_channel = discord.utils.get(guild.text_channels, name=channel_name)
         if existing_channel:
@@ -89,7 +89,7 @@ class TicketView(discord.ui.View):
 
         embed = discord.Embed(
             title='New Ticket created',
-            description=f'Your Support-Ticket was successfully created. (Enter your Question / etc..)',
+            description=f'Your Bug-Report-Ticket was successfully created. (Enter Bug! Please include Screenshots!)',
             color=discord.Color.brand_green()
         )
 
