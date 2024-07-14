@@ -9,6 +9,9 @@ class TicketSystem(ezcord.Cog, hidden=True):
     async def on_ready(self):
         self.bot.add_view(TicketView())
 
+    @slash_command()
+    async def setup_ticket(self, ctx):
+        pass
 
 def setup(bot):
     bot.add_cog(TicketSystem(bot))
