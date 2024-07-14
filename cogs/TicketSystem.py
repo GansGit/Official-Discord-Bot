@@ -13,7 +13,7 @@ class TicketSystem(ezcord.Cog, hidden=True):
         self.bot.add_view(view)
         print(f'Bot is ready. Loaded persistent views.')
 
-    @ticket.command()
+    @ticket.command(description='Sets the ticket system up')
     @discord.default_permissions(administrator=True)
     async def setup(self, ctx: discord.ApplicationContext):
         embed = discord.Embed(
