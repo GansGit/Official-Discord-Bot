@@ -14,7 +14,9 @@ class Fun(ezcord.Cog, emoji='🐧'):
     async def fact(self, ctx):
         api_url = f'https://api.api-ninjas.com/v1/facts'
         response = requests.get(api_url, headers={'X-Api-Key': '5mL4GuH2YS67IP3mCTilXQ==6YtvGhWWOjJqU6OT'})
-        
+
+        rp_emoji = discord.utils.get(self.bot.get_guild(1254423118315917392).emojis, id=1259198565289426986)
+
         print(response.text)
         
         if response.status_code == requests.codes.ok:
@@ -25,7 +27,7 @@ class Fun(ezcord.Cog, emoji='🐧'):
             
             embed = discord.Embed(
                 title='Random Fact',
-                description=f'{fact}',
+                description=f'{fact} {rp_emoji}',
                 color=discord.Color.green()
             )
             embed.set_footer(text=f'{ft_text} - Fact by api-ninjas.com')
