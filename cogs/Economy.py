@@ -4,22 +4,23 @@ import discord
 import ezcord
 import sqlite3
 
-from EconomyManager import Manager
+#from EconomyManager import Manager
 
 
 class Economy(ezcord.Cog, emoji='🍪', description="Show information about the bot", hidden=True):
-    def __int__(self, bot):
-        self.bot = bot
-        self.manager = Manager(self=bot) # defining database manager
+    # def __init__(self, bot):
+    #    self.bot = bot
+     #   self.manager = Manager(bot=self.bot) # defining Manager
+
     @commands.Cog.listener()
     async def on_ready(self):
         # creating economy database, if not exists
         self.manager.create_database()
 
-    @slash_command()
-    async def setup(self, ctx:discord.ApplicationContext):
-        self.manager.createUser(user_id=ctx.user.id)
-        await ctx.respond('Created user', ephemeral=True)
+    # @slash_command()
+    # async def setup(self, ctx:discord.ApplicationContext):
+    #    self.manager.createUser(user_id=ctx.user.id)
+    #    await ctx.respond('Created user', ephemeral=True)
 
 def setup(bot):
     bot.add_cog(Economy(bot))
