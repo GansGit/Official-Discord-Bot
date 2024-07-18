@@ -1,6 +1,5 @@
 import sqlite3
 
-
 class Manager:
     def __int__(self, bot):
         self.bot = bot
