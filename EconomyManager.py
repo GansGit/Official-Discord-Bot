@@ -2,6 +2,9 @@ import sqlite3
 
 
 class Manager:
+    def __int__(self, bot):
+        self.bot = bot
+
     def doesUserExist(self, user_id):
         pass
 
