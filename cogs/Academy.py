@@ -151,7 +151,7 @@ class PythonRessourceView(discord.ui.View):
         if category == 'Basics':
             embed = discord.Embed(
                 title=f'Ressources for Python',
-                description=f"Hey {interaction.user.mention}\nYou'll find ressources for Python basics [here](https://creative-dreamer.gitbook.io/coding-soul-python-course/basics/operators#comparision). Dont forget to star it <:github:1259196523779194991>",
+                description=f"Hey {interaction.user.mention}\nYou'll find ressources for python basics [here](https://creative-dreamer.gitbook.io/coding-soul-python-course/basics/operators#comparision)",
                 color=discord.Colour.blurple()
             )
             embed.set_thumbnail(url='https://media.discordapp.net/attachments/1259158345760243765/1260589734757924924/python_logo.png?ex=668fdf2d&is=668e8dad&hm=e19afe81586d1b896f1d33f5e6cf0fc2e5691372867ad010d7398fb56ab0cffa&=&format=webp&quality=lossless&width=385&height=385')
