@@ -150,7 +150,7 @@ class PythonRessourceView(discord.ui.View):
         
         if category == 'Basics':
             embed = discord.Embed(
-                title=f'Ressources for Python',
+                title=f'Ressources for python',
                 description=f"Hey {interaction.user.mention}\nYou'll find ressources for python basics [here](https://creative-dreamer.gitbook.io/coding-soul-python-course/basics/operators#comparision)",
                 color=discord.Colour.blurple()
             )
