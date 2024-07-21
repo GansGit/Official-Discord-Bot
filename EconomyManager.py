@@ -1,5 +1,6 @@
 import sqlite3
 
+
 class Manager:
     def __int__(self, bot):
         self.bot = bot
@@ -12,7 +13,6 @@ class Manager:
         cursor = conn.cursor()
         qry = "INSERT INTO users (id, bank, wallet) VALUES (?,?,?)"
         cursor.execute(qry, (user_id, 100, 0))
-        
 
     def addCoins(self, user_id, amount):
         pass
