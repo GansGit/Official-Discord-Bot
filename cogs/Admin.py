@@ -31,9 +31,10 @@ class NewsModal(discord.ui.Modal):
     async def callback(self, interaction):
         today = datetime.date.today()
         embed = discord.Embed(
-            title=f'{today} - News',
+            title=f'<:home:1264678646531227751> › SERVER ANNOUNCEMENT',
             description="We have news for you all\n",
             color=discord.Colour.orange()
         )
+        embed.set_image(url='https://media.discordapp.net/attachments/1259158345760243765/1264676190296211476/standard.gif?ex=669ebcfc&is=669d6b7c&hm=4ab19ed763ba768b5f5b501b1665858cc58ca652d07f297123f4dd9eaebf93eb&=&width=605&height=213')
 
         await interaction.response.send_message(embed=embed)
