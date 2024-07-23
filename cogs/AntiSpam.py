@@ -27,6 +27,7 @@ class AntiSpam(ezcord.Cog, hidden=True):
                     color=discord.Colour.dark_red(),
                     timestamp=datetime.datetime.now()
                 )
+                embed.set_footer(text='Coding Soul - AntiSpam', icon_url=Config.get_config('footer')['icon-url'])
 
                 await message.delete()
                 await message.channel.send(embed=embed)
