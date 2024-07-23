@@ -17,7 +17,6 @@ class AntiSpam(ezcord.Cog, hidden=True):
         blacklist = Config.get_config('anti-spam')['blacklist']
 
         for word in msg:
-            print("Überprüftes Wort:", word)
             if word.lower() in [b.lower() for b in blacklist]:
 
                 embed = discord.Embed(
