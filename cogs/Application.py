@@ -4,7 +4,7 @@ from discord.commands import slash_command, SlashCommandGroup
 import ezcord
 
 
-class Application(ezcord.Cog):
+class Application(ezcord.Cog, emoji='✍'):
     application = SlashCommandGroup("application")
 
     @application.command(description="Displays the requirements for the different positions.")
