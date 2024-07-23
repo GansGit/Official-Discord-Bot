@@ -52,3 +52,4 @@ class NewsModal(discord.ui.Modal):
         channel: discord.TextChannel = await self.bot.fetch_channel(1265357865225424897)
         message = await channel.send(embed=embed)
         await message.publish()
+        await interaction.response.send_message('Successfully sent the news ✅')
