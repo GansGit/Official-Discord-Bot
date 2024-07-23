@@ -19,10 +19,10 @@ bot = ezcord.Bot(
     intents=discord.Intents.all(),
     debug_guilds=[1254423118315917392],
     status=status,
-    activity=activity
+    activity=activity,
+    language='en'
 )
 bot.add_help_command(style=ezcord.HelpStyle.codeblocks, embed=help_embed)
-
 
 if __name__ == "__main__":
     for filename in os.listdir("cogs"):
