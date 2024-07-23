@@ -21,9 +21,9 @@ class AntiSpam(ezcord.Cog, hidden=True):
             if word.lower() in [b.lower() for b in blacklist]:
 
                 embed = discord.Embed(
-                    title='Warning!',
+                    title='Insult-Warning!',
                     description=f'Hey {message.author.mention}, \n'
-                                f':warning: Insults are not permitted on this Server!',
+                                f'Insults are not permitted on this Server!',
                     color=discord.Colour.dark_red(),
                     timestamp=datetime.datetime.now()
                 )
