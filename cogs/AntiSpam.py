@@ -1,4 +1,4 @@
-
+import datetime
 import ezcord
 import discord
 
@@ -20,8 +20,16 @@ class AntiSpam(ezcord.Cog, hidden=True):
             print("Überprüftes Wort:", word)
             if word.lower() in [b.lower() for b in blacklist]:
 
+                embed = discord.Embed(
+                    title='Warning!',
+                    description=f'Hey {message.author.mention}, \n'
+                                f':warning: Insults are not permitted on this Server!',
+                    color=discord.Colour.dark_red(),
+                    timestamp=datetime.datetime.now()
+                )
+
                 await message.delete()
-                await message.channel.send('Test!!!')
+                await message.channel.send(embed=embed)
                 break
 
     @commands.Cog.listener()
