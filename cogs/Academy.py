@@ -1,3 +1,5 @@
+import subprocess
+
 from discord.commands import slash_command, SlashCommandGroup
 import discord
 import ezcord
@@ -21,9 +23,7 @@ class Academy(ezcord.Cog, hidden=True):
     async def profile(self, ctx):
         user_id_str = str(ctx.user.id)
         courses = self.config.load_config()
-        # Initialisiere value standardmäßig
         value = "No courses enrolled"
-        # Prüfe, ob die Benutzer-ID in der Konfiguration existiert
         if user_id_str in courses:
             data = courses[user_id_str].get('courses', [])
 
@@ -64,9 +64,7 @@ class Academy(ezcord.Cog, hidden=True):
         user_id_str = str(ctx.user.id)
         courses = self.config.load_config()
 
-        # Initialisiere value standardmäßig
         value = "No courses enrolled"
-        # Prüfe, ob die Benutzer-ID in der Konfiguration existiert
         if user_id_str in courses:
             data = courses[user_id_str].get('courses', [])
 
@@ -95,6 +93,7 @@ class Academy(ezcord.Cog, hidden=True):
             await ctx.respond('This course is not enrolled.')
 
     @lesson.command(description="Show's you a modal for entering your code!")
+    @discord.default_permissions(administrator=True)
     async def solve(self, ctx):
 
         result = "abc"
@@ -127,18 +126,33 @@ class CourseView(discord.ui.View):
 
 class LessonModal(discord.ui.Modal):
     def __init__(self, result, *args, **kwargs):
-        super().__init__(
-            discord.ui.InputText(
-                label=f'Solution',
-                placeholder='Print the code out here!',
-                style=discord.InputTextStyle.long
-            )
-            , *args, **kwargs)
+        super().__init__(*args, **kwargs)
+        self.add_item(discord.ui.InputText(
+            label='Solution',
+            placeholder='Print the code out here!',
+            style=discord.InputTextStyle.long
+        ))
         self.solution = result
 
     async def callback(self, interaction):
-        pass
+        code_input = self.children[0]  # Saving Code
+        code = code_input.value  # Get the actual text from the InputText object
+        print(f"Code received: {code}")
 
+        output_buffer = io.StringIO()
+
+        with contextlib.redirect_stdout(output_buffer), contextlib.redirect_stderr(output_buffer):
+            try:
+                exec(code)
+            except Exception as e:
+                print(f'Error: {e}')
+
+        # Get the output from the buffer
+        output = output_buffer.getvalue()
+        print(f"Execution output: {output}")
+
+        # Optionally send the output back to the user via Discord interaction
+        await interaction.response.send_message(f"Execution output:\n{output}", ephemeral=True)
 
 class PythonRessourceView(discord.ui.View):
     options = [
