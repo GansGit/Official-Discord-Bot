@@ -73,13 +73,13 @@ class LevelSystem(ezcord.Cog, emoji='✨'):
             return
 
         def get_user_level(user_id):
-            with open('levels.json', 'r') as file:
-                json_file = json.load(file)
+            with open('levels.json', 'r') as f:
+                json_file = json.load(f)
             return json_file[str(user_id)]['level']
 
         def get_user_xp(user_id):
-            with open('levels.json', 'r') as file:
-                json_file = json.load(file)
+            with open('levels.json', 'r') as f:
+                json_file = json.load(f)
             return json_file[str(user_id)]['xp']
 
         await ctx.defer()
