@@ -31,8 +31,14 @@ class Economy(ezcord.Cog, hidden=True):
             await ctx.respond("Can't display the balance of a bot", ephemeral=True)  # sending mistake to user
             return
 
-        await ctx.respond(f'{user.mention}')  # responding to the user
+        rs = EconomyManager.doesUserExist(ctx.user.id)
 
+        if rs is not None:
+            print(rs[0][1])
+        else:
+            EconomyManager.createUser(ctx.user.id)
+
+        await ctx.respond(f'{user.mention}')  # responding to the user
 
 # setup for the cog
 def setup(bot):
