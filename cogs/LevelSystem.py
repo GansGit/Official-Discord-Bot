@@ -54,8 +54,6 @@ class LevelSystem(ezcord.Cog, emoji='✨'):
                 data = load_json()
                 user_id = str(message.author.id)
 
-                print('Received message: ' + message.content + ", xp: " + str(random_xp))  # Logging for control
-
                 data = add_or_update_xp(data=data, user_id=user_id, xp_to_add=random_xp)
 
                 save_json(data=data)
