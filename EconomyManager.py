@@ -1,36 +1,40 @@
 import sqlite3
 
 
-def doesUserExist(self, user_id):
+def doesUserExist(user_id):
     pass
 
 
-def createUser(self, user_id):
+def createUser(user_id):
     conn: sqlite3.Connection = sqlite3.connect('economy.db')
     cursor = conn.cursor()
     qry = "INSERT INTO users (id, bank, wallet) VALUES (?,?,?)"
     cursor.execute(qry, (user_id, 100, 0))
 
 
-def addCoins(self, user_id, amount):
+def addCoins(user_id, amount):
     conn: sqlite3.Connection = sqlite3.connect('economy.db')
     cursor = conn.cursor()
 
 
-def removeCoins(self, user_id, amount):
+def removeCoins(user_id, amount):
     pass
 
 
-def getCoins(self, user_id):
+def getCoins(user_id):
     pass
 
 
-def create_database(self):
+def create_database():
     conn: sqlite3.Connection = sqlite3.connect('economy.db')
     cursor = conn.cursor()
-    qry = """"
-                CREATE TABLE IF NOT EXISTS users
-                (id INTEGER PRIMARY KEY, bank INTEGER, wallet INTEGER)
-                """
+    qry = """
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            bank INTEGER NOT NULL,
+            wallet INTEGER NOT NULL
+        )
+    """
     cursor.execute(qry)
     conn.commit()
+    conn.close()
