@@ -53,11 +53,9 @@ class LevelSystem(ezcord.Cog, emoji='✨'):
                 random_xp = random.randint(5, 20)
                 data = load_json()
                 user_id = str(message.author.id)
-
-                data = add_or_update_xp(data=data, user_id=user_id, xp_to_add=random_xp)
-
-                save_json(data=data)
                 current_level = data[user_id]['level']
+                data = add_or_update_xp(data=data, user_id=user_id, xp_to_add=random_xp)
+                save_json(data=data)
 
                 new_data = load_json()
                 if new_data[user_id]['level'] > current_level:
