@@ -1,3 +1,5 @@
+import datetime
+
 import ezcord
 import discord
 import logging
@@ -5,7 +7,7 @@ import logging
 import EconomyManager
 from discord.ext import commands
 from discord.commands import option, slash_command
-
+from cogs.Config import Config
 
 class Economy(ezcord.Cog, hidden=True):
     def __init__(self, bot):
@@ -23,6 +25,7 @@ class Economy(ezcord.Cog, hidden=True):
 
     @slash_command(name='balance', description="Display's the account of a user")
     @option('user', description="Pick a user")
+    @discord.default_permissions(administrator=True)
     async def balance(self, ctx: discord.ApplicationContext, user: discord.User = None):
         if user is None:  # check if user was not typed in
             user = ctx.user  # sets user to the author of the cmd
@@ -34,11 +37,22 @@ class Economy(ezcord.Cog, hidden=True):
         rs = EconomyManager.doesUserExist(ctx.user.id)
 
         if rs is not None:
-            print(rs[0][1])
+            bal_embed = discord.Embed(  # designing the embed
+                title=f'Balance of {user.display_name}',
+                color=discord.Colour.orange(),
+                timestamp=datetime.datetime.now()
+            )
+
+            bal_embed.add_field(name='Bank', value=f'{rs[0][1]} :dollar:', inline=True)
+            bal_embed.add_field(name='Wallet', value=f'{rs[0][2]} :dollar:', inline=True)
+            bal_embed.set_footer(text='Coding Soul', icon_url=Config.get_config('footer')['icon-url'])
+
+            await ctx.respond(embed=bal_embed)  # responding to the user
+
         else:
             EconomyManager.createUser(ctx.user.id)
+            await ctx.respond('Account successfully created!', ephemeral=True)
 
-        await ctx.respond(f'{user.mention}')  # responding to the user
 
 # setup for the cog
 def setup(bot):
