@@ -5,7 +5,8 @@ import logging
 import EconomyManager
 from discord.ext import commands
 
-class Economy(ezcord.Cog):
+
+class Economy(ezcord.Cog, hidden=True):
     def __init__(self, bot):
         self.bot = bot
 
