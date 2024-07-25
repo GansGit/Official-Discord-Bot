@@ -8,12 +8,12 @@ def doesUserExist(user_id):
 def createUser(user_id):
     conn: sqlite3.Connection = sqlite3.connect('economy.db')
     cursor = conn.cursor()
-    qry = "INSERT INTO users (id, bank, wallet) VALUES (?,?,?)"  # declaring 
+    qry = "INSERT INTO users (id, bank, wallet) VALUES (?,?,?)"  # declaring qry for SQL
 
-    cursor.execute(qry, (user_id, 100, 0))
+    cursor.execute(qry, (user_id, 100, 0))  # executing sql
 
-    conn.commit()
-    conn.close()
+    conn.commit()  # committing the change
+    conn.close()  # closes the connection
 
 
 def addCoins(user_id, amount):
