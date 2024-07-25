@@ -24,10 +24,14 @@ class Economy(ezcord.Cog, hidden=True):
     @slash_command(name='balance', description="Display's the account of a user")
     @option('user', description="Pick a user")
     async def balance(self, ctx: discord.ApplicationContext, user: discord.User = None):
-        if user is None:
-            user = ctx.author
+        if user is None:  # check if user was not typed in
+            user = ctx.user  # sets user to the author of the cmd
 
-        await ctx.respond('')
+        if user.bot:  # check if user is bot
+            await ctx.respond("Can't display the balance of a bot", ephemeral=True)  # sending mistake to user
+            return
+
+        await ctx.respond(f'{user.mention}')  # responding to the user
 
 
 # setup for the cog
