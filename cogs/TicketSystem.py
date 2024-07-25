@@ -9,6 +9,7 @@ import asyncio
 class TicketSystem(ezcord.Cog, hidden=True):
     ticket = SlashCommandGroup("ticket", description="Commands of the ticket system")
 
+
     @commands.Cog.listener()
     async def on_ready(self):
         view = TicketView()
@@ -18,6 +19,10 @@ class TicketSystem(ezcord.Cog, hidden=True):
     @ticket.command(description='Sets the ticket system up')
     @discord.default_permissions(administrator=True)
     async def setup(self, ctx: discord.ApplicationContext):
+        if not ctx.user.guild_permissions.administrator:
+            await ctx.respond("You do not have the required permissions to use this command.", ephemeral=True)
+            return
+
         embed = discord.Embed(
             title='Ticket System',
             color=discord.Colour.green(),
@@ -31,6 +36,9 @@ class TicketSystem(ezcord.Cog, hidden=True):
     @ticket.command(description='Closes a Ticket.')
     @discord.default_permissions(administrator=True)
     async def close(self, ctx: discord.ApplicationContext):
+        if not ctx.user.guild_permissions.administrator:
+            await ctx.respond("You do not have the required permissions to use this command.", ephemeral=True)
+            return
         channel = ctx.channel
 
         if channel.name.startswith('support-') or channel.name.startswith('bug-'):
