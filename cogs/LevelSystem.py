@@ -72,6 +72,10 @@ class LevelSystem(ezcord.Cog, emoji='✨'):
         if user is None:
             user = ctx.author
 
+        if user.bot:
+            await ctx.respond(f'{user.mention} is a bot.', ephemeral=True)
+            return
+
         def get_user_level(user_id):
             with open('levels.json', 'r') as file:
                 json_file = json.load(file)
