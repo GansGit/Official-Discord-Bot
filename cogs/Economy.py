@@ -62,8 +62,8 @@ class Economy(ezcord.Cog, emoji='💵'):
 
     @slash_command(name='add-coins', description='Set currency of a user')
     @discord.default_permissions(administrator=True)
-    @option('User', description='Pick a user where you want to')
-    @option('Method', description='Pick the method', choices=['bank', 'wallet'])
+    @option('User', description='Pick a user where you want to', required=True)
+    @option('Method', description='Pick the method', choices=['bank', 'wallet'], required=True)
     async def add_coins(self, ctx, user: discord.User, method: str, amount: int):
         EconomyManager.addCoins(user.id, amount, method=method)
         await ctx.respond(f'Added {amount} to {user.mention}')
