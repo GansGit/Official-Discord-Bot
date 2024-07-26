@@ -35,7 +35,7 @@ def createUser(user_id):
     conn.close()  # closes the connection
 
 
-def addCoins(user_id, amount, method: str):
+def add_coins(user_id, amount: int, method: str):
     """
     Adding coins to a user
     :param method:
@@ -69,12 +69,60 @@ def addCoins(user_id, amount, method: str):
     sec_conn.close()
 
 
-def removeCoins(user_id, amount):
-    pass
+def remove_coins(user_id, amount: int, method: str):
+    first_conn: sqlite3.Connection = sqlite3.connect('./economy.db')
+    cursor = first_conn.cursor()
+
+    # selecting the current value of the user
+    qry = "SELECT * FROM users WHERE id = ?"
+    cursor.execute(qry, (user_id,))
+    value = cursor.fetchall()  # getting the value from the cursor
+    first_conn.close()
+
+    if method.lower() == 'bank':
+        current_money = value[0][1]
+    else:
+        current_money = value[0][2]
+
+    sec_conn: sqlite3.Connection = sqlite3.connect('./economy.db')
+    cursor = sec_conn.cursor()
+    qry = f"""
+        UPDATE users
+        SET {method.lower()} = {current_money - amount}
+        WHERE id = {user_id}
+    """
+    cursor.execute(qry)
+    sec_conn.commit()
+    sec_conn.close()
 
 
-def getCoins(user_id):
-    pass
+def get_coins(user_id, method):
+    conn: sqlite3.Connection = sqlite3.connect('./economy.db')
+    cursor = conn.cursor()
+
+    if method.lower() == 'wallet':
+        qry = f"""
+            SELECT wallet
+            FROM users
+            WHERE id = {user_id}
+        """
+        cursor.execute(qry)
+        data = cursor.fetchall()
+        conn.close()
+
+        return data[0][0]
+
+    elif method.lower() == 'bank':
+        qry = f"""
+            SELECT bank
+            FROM users
+            WHERE id = {user_id}
+        """
+        cursor.execute(qry)
+        data = cursor.fetchall()
+        conn.close()
+
+        return data[0][0]
 
 
 def create_database():
