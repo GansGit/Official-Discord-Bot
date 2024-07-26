@@ -9,6 +9,7 @@ from discord.ext import commands
 from discord.commands import option, slash_command
 from cogs.Config import Config
 
+
 class Economy(ezcord.Cog, hidden=True):
     def __init__(self, bot):
         self.bot = bot
@@ -23,22 +24,15 @@ class Economy(ezcord.Cog, hidden=True):
         except Exception as e:
             print(f'Error creating database: {e}')
 
-    @slash_command(name='balance', description="Display's the account of a user")
+    @slash_command(name='balance', description="Display your Money balance ;)")
     @option('user', description="Pick a user")
     @discord.default_permissions(administrator=True)
-    async def balance(self, ctx: discord.ApplicationContext, user: discord.User = None):
-        if user is None:  # check if user was not typed in
-            user = ctx.user  # sets user to the author of the cmd
-
-        if user.bot:  # check if user is bot
-            await ctx.respond("Can't display the balance of a bot", ephemeral=True)  # sending mistake to user
-            return
-
+    async def balance(self, ctx: discord.ApplicationContext):
         rs = EconomyManager.doesUserExist(ctx.user.id)
 
-        if rs is not None:
+        if rs is not None:  # Checking if user exists
             bal_embed = discord.Embed(  # designing the embed
-                title=f'Balance of {user.display_name}',
+                title=f'Balance of {ctx.user.display_name}',
                 color=discord.Colour.orange(),
                 timestamp=datetime.datetime.now()
             )
@@ -50,8 +44,12 @@ class Economy(ezcord.Cog, hidden=True):
             await ctx.respond(embed=bal_embed)  # responding to the user
 
         else:
-            EconomyManager.createUser(ctx.user.id)
+            EconomyManager.createUser(ctx.user.id)  # creating user
             await ctx.respond('Account successfully created!', ephemeral=True)
+
+    @slash_command(name='work', description="Work to get some money")
+    async def work(self, ctx: discord.ApplicationContext):
+        pass
 
 
 # setup for the cog
