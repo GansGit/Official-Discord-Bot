@@ -105,12 +105,17 @@ class Economy(ezcord.Cog, emoji='💵'):
 
     @slash_command(name='shop', description='Check the shop!')
     async def shop(self, ctx: discord.ApplicationContext):
-        embed = discord.Embed(
+        embed = discord.Embed(  # embed
             title='<:home:1264678646531227751> › Soul Shop',
             color=discord.Color.orange(),
             timestamp=datetime.datetime.now()
         )
-        embed.set_footer(text='Coding Soul - Economy', icon_url=Config.get_config('footer')['icon-url'])
+        embed.add_field(  # adding field to embed
+            name=':chicken: • Chicken Wings',
+            value='500 Souls'
+        )
+        embed.set_footer(text='Coding Soul - Economy', icon_url=Config.get_config('footer')['icon-url'])  # set footer
+        await ctx.respond(embed=embed)  # responding user
 
 
 # setup for the cog
