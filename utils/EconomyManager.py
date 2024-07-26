@@ -10,7 +10,7 @@ def doesUserExist(user_id: int):
     :return:
 
     """
-    conn: sqlite3.Connection = sqlite3.connect('../economy.db')  # creating connection
+    conn: sqlite3.Connection = sqlite3.connect('./economy.db')  # creating connection
     cursor = conn.cursor()
     qry = "SELECT * FROM users WHERE id = ?"  # declaring qry for SQL
     cursor.execute(qry, (user_id,))  # executing the qry
@@ -25,7 +25,7 @@ def doesUserExist(user_id: int):
 
 
 def createUser(user_id):
-    conn: sqlite3.Connection = sqlite3.connect('../economy.db')  # creating connection
+    conn: sqlite3.Connection = sqlite3.connect('./economy.db')  # creating connection
     cursor = conn.cursor()
     qry = "INSERT INTO users (id, bank, wallet) VALUES (?,?,?)"  # declaring qry for SQL
 
@@ -43,7 +43,7 @@ def addCoins(user_id, amount, method: str):
     :param amount
     """
 
-    first_conn: sqlite3.Connection = sqlite3.connect('../economy.db')
+    first_conn: sqlite3.Connection = sqlite3.connect('./economy.db')
     cursor = first_conn.cursor()
 
     # selecting the current value of the user
@@ -57,12 +57,12 @@ def addCoins(user_id, amount, method: str):
     else:
         current_money = value[0][2]
 
-    sec_conn: sqlite3.Connection = sqlite3.connect('../economy.db')
+    sec_conn: sqlite3.Connection = sqlite3.connect('./economy.db')
     cursor = sec_conn.cursor()
     qry = f"""
         UPDATE users
         SET {method.lower()} = {current_money + amount}
-    
+        WHERE id = {user_id}
     """
     cursor.execute(qry)
     sec_conn.commit()
@@ -78,7 +78,7 @@ def getCoins(user_id):
 
 
 def create_database():
-    conn: sqlite3.Connection = sqlite3.connect('../economy.db')
+    conn: sqlite3.Connection = sqlite3.connect('./economy.db')
     cursor = conn.cursor()
     qry = """
         CREATE TABLE IF NOT EXISTS users (
@@ -90,3 +90,18 @@ def create_database():
     cursor.execute(qry)
     conn.commit()
     conn.close()
+
+
+def get_leaderboard():
+    conn: sqlite3.Connection = sqlite3.connect('./economy.db')
+    cursor = conn.cursor()
+    qry = """
+        SELECT id, bank, wallet
+        FROM users
+        ORDER BY bank DESC
+        LIMIT 10
+    """
+    cursor.execute(qry)
+    rows = cursor.fetchall()
+
+    return rows
