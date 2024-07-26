@@ -66,7 +66,29 @@ class Economy(ezcord.Cog, emoji='💵'):
     @option('Method', description='Pick the method', choices=['bank', 'wallet'], required=True)
     async def add_coins(self, ctx, user: discord.User, method: str, amount: int):
         EconomyManager.addCoins(user.id, amount, method=method)
-        await ctx.respond(f'Added {amount} to {user.mention}')
+        await ctx.respond(f'Added {amount} to {user.mention}', ephemeral=True)
+
+    @slash_command(name='leaderboard', description='Check the leaderboard!')
+    async def leaderboard(self, ctx: discord.ApplicationContext):
+        leaderboard_list = EconomyManager.get_leaderboard()
+
+        pos = 1
+
+        desc = ""
+
+        for i in leaderboard_list:
+            user = await self.bot.fetch_user(i[0])
+            desc += f"{pos}. {user.mention} • {i[1]} :dollar:\n"
+            pos += 1
+
+        board_embed = discord.Embed(
+            title='Leaderboard',
+            color=discord.Color.orange(),
+            description=desc
+        )
+        board_embed.set_footer(text='Coding Soul - Economy', icon_url=Config.get_config('footer')['icon-url'])
+
+        await ctx.respond(embed=board_embed)
 
 
 # setup for the cog
