@@ -78,7 +78,8 @@ class Economy(ezcord.Cog, emoji='💵'):
 
         for i in leaderboard_list:
             user = await self.bot.fetch_user(i[0])
-            desc += f"{pos}. {user.mention} • {i[1]} :dollar:\n"
+            pos_str = await self.conv_pos(pos)
+            desc += f"{pos_str}. {user.mention} • {i[1]} :dollar:\n"
             pos += 1
 
         board_embed = discord.Embed(
@@ -89,6 +90,16 @@ class Economy(ezcord.Cog, emoji='💵'):
         board_embed.set_footer(text='Coding Soul - Economy', icon_url=Config.get_config('footer')['icon-url'])
 
         await ctx.respond(embed=board_embed)
+
+    async def conv_pos(self, pos: int):
+        if pos == 1:
+            return ":first_place:"
+        elif pos == 2:
+            return ":second_place:"
+        elif pos == 3:
+            return ":third_place:"
+        else:
+            return pos
 
 
 # setup for the cog
