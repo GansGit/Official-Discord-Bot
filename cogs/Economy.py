@@ -37,8 +37,8 @@ class Economy(ezcord.Cog, emoji='💵'):
                 timestamp=datetime.datetime.now()
             )
 
-            bal_embed.add_field(name='Bank', value=f'{rs[0][1]} :dollar:', inline=True)
-            bal_embed.add_field(name='Wallet', value=f'{rs[0][2]} :dollar:', inline=True)
+            bal_embed.add_field(name='Bank', value=f'{rs[0][1]} <:souls:1266390733821317230>', inline=True)
+            bal_embed.add_field(name='Wallet', value=f'{rs[0][2]} <:souls:1266390733821317230>', inline=True)
             bal_embed.set_footer(text='Coding Soul', icon_url=Config.get_config('footer')['icon-url'])
 
             await ctx.respond(embed=bal_embed)  # responding to the user
@@ -58,7 +58,8 @@ class Economy(ezcord.Cog, emoji='💵'):
         earnings = random.randint(25, 250)
 
         EconomyManager.addCoins(ctx.user.id, earnings, 'bank')  # adding coins in database
-        await ctx.respond(f"You've worked as a freelancer and earned {earnings} :dollar:")  # responding to user
+        await ctx.respond(
+            f"You've worked as a freelancer and earned {earnings} <:souls:1266390733821317230> ")  # responding to user
 
     @slash_command(name='add-coins', description='Set currency of a user')
     @discord.default_permissions(administrator=True)
@@ -66,7 +67,7 @@ class Economy(ezcord.Cog, emoji='💵'):
     @option('Method', description='Pick the method', choices=['bank', 'wallet'], required=True)
     async def add_coins(self, ctx, user: discord.User, method: str, amount: int):
         EconomyManager.addCoins(user.id, amount, method=method)
-        await ctx.respond(f'Added {amount} to {user.mention}', ephemeral=True)
+        await ctx.respond(f'Added {amount} <:souls:1266390733821317230> to {user.mention}', ephemeral=True)
 
     @slash_command(name='leaderboard', description='Check the leaderboard!')
     async def leaderboard(self, ctx: discord.ApplicationContext):
@@ -74,18 +75,19 @@ class Economy(ezcord.Cog, emoji='💵'):
 
         pos = 1
 
-        desc = ""
+        desc = "## Top 10 Users:\n"
 
         for i in leaderboard_list:
             user = await self.bot.fetch_user(i[0])
             pos_str = await self.conv_pos(pos)
-            desc += f"{pos_str}. {user.mention} • {i[1]} :dollar:\n"
+            desc += f"{pos_str}. {user.mention} • {i[1]} <:souls:1266390733821317230>\n"
             pos += 1
 
         board_embed = discord.Embed(
             title='Leaderboard',
             color=discord.Color.orange(),
-            description=desc
+            description=desc,
+            timestamp=datetime.datetime.now()
         )
         board_embed.set_footer(text='Coding Soul - Economy', icon_url=Config.get_config('footer')['icon-url'])
 
@@ -99,7 +101,16 @@ class Economy(ezcord.Cog, emoji='💵'):
         elif pos == 3:
             return ":third_place:"
         else:
-            return pos
+            return '<:silver_medal:1266388617140371497>'
+
+    @slash_command(name='shop', description='Check the shop!')
+    async def shop(self, ctx: discord.ApplicationContext):
+        embed = discord.Embed(
+            title='<:home:1264678646531227751> › Soul Shop',
+            color=discord.Color.orange(),
+            timestamp=datetime.datetime.now()
+        )
+        embed.set_footer(text='Coding Soul - Economy', icon_url=Config.get_config('footer')['icon-url'])
 
 
 # setup for the cog
