@@ -141,18 +141,19 @@ class LessonModal(discord.ui.Modal):
 
         output_buffer = io.StringIO()
 
-        with contextlib.redirect_stdout(output_buffer), contextlib.redirect_stderr(output_buffer):
-            try:
-                exec(code)
-            except Exception as e:
-                print(f'Error: {e}')
+        # with contextlib.redirect_stdout(output_buffer), contextlib.redirect_stderr(output_buffer):
+        #    try:
+        #        exec(code)
+        #    except Exception as e:
+        #        print(f'Error: {e}')
 
         # Get the output from the buffer
-        output = output_buffer.getvalue()
-        print(f"Execution output: {output}")
+        # output = output_buffer.getvalue()
+        # print(f"Execution output: {output}")
 
         # Optionally send the output back to the user via Discord interaction
-        await interaction.response.send_message(f"Execution output:\n{output}", ephemeral=True)
+        # await interaction.response.send_message(f"Execution output:\n{output}", ephemeral=True)
+
 
 class PythonRessourceView(discord.ui.View):
     options = [
