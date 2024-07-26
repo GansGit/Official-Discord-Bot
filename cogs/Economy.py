@@ -1,13 +1,14 @@
 import datetime
+import random
 
 import ezcord
 import discord
-import logging
 
 import EconomyManager
 from discord.ext import commands
 from discord.commands import option, slash_command
 from cogs.Config import Config
+
 
 
 class Economy(ezcord.Cog, hidden=True):
@@ -48,14 +49,16 @@ class Economy(ezcord.Cog, hidden=True):
             await ctx.respond('Account successfully created!', ephemeral=True)
 
     @slash_command(name='work', description="Work to get some money")
-    @commands.cooldown(1, 60, commands.BucketType.user)  # cooldown
+    @commands.cooldown(1, 5, commands.BucketType.user)  # cooldown
     async def work(self, ctx: discord.ApplicationContext):
         rs = EconomyManager.doesUserExist(ctx.user.id)
 
         if rs is None:  # checking if user exists
             EconomyManager.createUser(ctx.user.id)  # creating an account for the user
 
-        await ctx.respond()
+        earnings = random.randint(25, 250)
+
+        await ctx.respond(f"You've worked as a freelancer and earned {earnings} :dollar:")
 
 
 # setup for the cog
