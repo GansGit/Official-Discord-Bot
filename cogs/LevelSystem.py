@@ -66,12 +66,9 @@ class LevelSystem(ezcord.Cog, emoji='✨'):
                     data = add_or_update_xp(data=data, user_id=user_id, xp_to_add=random_xp)
                     save_json(data=data)
 
-
-
-
-    @slash_command(name='rank', description="Show's the current rank.")
+    @slash_command(name='level', description="Show's the current rank.")
     @option("user", description="Pick a user")
-    async def rank(self, ctx: discord.ApplicationContext, user: discord.User = None):
+    async def level(self, ctx: discord.ApplicationContext, user: discord.User = None):
         if user is None:
             user = ctx.author
 
