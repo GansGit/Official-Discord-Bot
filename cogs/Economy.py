@@ -3,12 +3,12 @@ import random
 
 import ezcord
 import discord
+import utils.TimeConverter as TimeConverter
+from utils import EconomyManager
 
-import EconomyManager
 from discord.ext import commands
 from discord.commands import option, slash_command
 from cogs.Config import Config
-
 
 
 class Economy(ezcord.Cog, hidden=True):
@@ -27,7 +27,6 @@ class Economy(ezcord.Cog, hidden=True):
 
     @slash_command(name='balance', description="Display your Money balance ;)")
     @option('user', description="Pick a user")
-    @discord.default_permissions(administrator=True)
     async def balance(self, ctx: discord.ApplicationContext):
         rs = EconomyManager.doesUserExist(ctx.user.id)
 
@@ -49,7 +48,7 @@ class Economy(ezcord.Cog, hidden=True):
             await ctx.respond('Account successfully created!', ephemeral=True)
 
     @slash_command(name='work', description="Work to get some money")
-    @commands.cooldown(1, 5, commands.BucketType.user)  # cooldown
+    @commands.cooldown(1, TimeConverter.h_in_s(0.5), commands.BucketType.user)  # cooldown
     async def work(self, ctx: discord.ApplicationContext):
         rs = EconomyManager.doesUserExist(ctx.user.id)
 
@@ -58,6 +57,7 @@ class Economy(ezcord.Cog, hidden=True):
 
         earnings = random.randint(25, 250)
 
+        EconomyManager.addCoins(ctx.user.id, earnings, 'bank')
         await ctx.respond(f"You've worked as a freelancer and earned {earnings} :dollar:")
 
 
