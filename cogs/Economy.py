@@ -48,8 +48,14 @@ class Economy(ezcord.Cog, hidden=True):
             await ctx.respond('Account successfully created!', ephemeral=True)
 
     @slash_command(name='work', description="Work to get some money")
+    @commands.cooldown(1, 60, commands.BucketType.user)  # cooldown
     async def work(self, ctx: discord.ApplicationContext):
-        pass
+        rs = EconomyManager.doesUserExist(ctx.user.id)
+
+        if rs is None:  # checking if user exists
+            EconomyManager.createUser(ctx.user.id)  # creating an account for the user
+
+        await ctx.respond()
 
 
 # setup for the cog
