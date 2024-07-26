@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 
 from cogs.Config import Config
-from update_stats import Updater
+from utils.update_stats import Updater
 
 
 class Logs(commands.Cog):
