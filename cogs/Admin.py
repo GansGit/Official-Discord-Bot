@@ -49,7 +49,7 @@ class NewsModal(discord.ui.Modal):
         embed.set_image(url='https://media.discordapp.net/attachments/1259158345760243765/1264676190296211476/standard.gif?ex=669ebcfc&is=669d6b7c&hm=4ab19ed763ba768b5f5b501b1665858cc58ca652d07f297123f4dd9eaebf93eb&=&width=605&height=213')
         embed.set_footer(text='Coding Soul - News', icon_url='https://cdn.discordapp.com/attachments/1254423265707954178/1256938221665779763/coding-soul-high-resolution-logo-white.png?ex=669e45f0&is=669cf470&hm=30789a585bf50fdfc73d49a835e516983dd574551c433892af070c8509ee3b63&')
 
-        channel: discord.TextChannel = await self.bot.fetch_channel(1256613626526040175)
+        channel: discord.TextChannel = await self.bot.fetch_channel(1256615868234731582)
         message = await channel.send(embed=embed)
         await message.publish()
         await interaction.response.send_message('Successfully sent the news ✅', ephemeral=True)
