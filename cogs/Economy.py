@@ -11,7 +11,7 @@ from discord.commands import option, slash_command
 from cogs.Config import Config
 
 
-class Economy(ezcord.Cog, hidden=True):
+class Economy(ezcord.Cog, emoji='💵'):
     def __init__(self, bot):
         self.bot = bot
 
@@ -57,8 +57,16 @@ class Economy(ezcord.Cog, hidden=True):
 
         earnings = random.randint(25, 250)
 
-        EconomyManager.addCoins(ctx.user.id, earnings, 'bank')
-        await ctx.respond(f"You've worked as a freelancer and earned {earnings} :dollar:")
+        EconomyManager.addCoins(ctx.user.id, earnings, 'bank')  # adding coins in database
+        await ctx.respond(f"You've worked as a freelancer and earned {earnings} :dollar:")  # responding to user
+
+    @slash_command(name='add-coins', description='Set currency of a user')
+    @discord.default_permissions(administrator=True)
+    @option('User', description='Pick a user where you want to')
+    @option('Method', description='Pick the method', choices=['bank', 'wallet'])
+    async def add_coins(self, ctx, user: discord.User, method: str, amount: int):
+        EconomyManager.addCoins(user.id, amount, method=method)
+        await ctx.respond(f'Added {amount} to {user.mention}')
 
 
 # setup for the cog
