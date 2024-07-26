@@ -1,6 +1,6 @@
-def s_in_h(seconds: int or float):
+def h_in_s(hours: int or float):
     """"
-    Converting seconds into hours
+    Converting hours into seconds to minimize the code
     """
-    hours = seconds * 3600
-    return hours
+    seconds = hours * 3600
+    return seconds
