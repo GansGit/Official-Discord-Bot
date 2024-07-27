@@ -151,8 +151,26 @@ class Economy(ezcord.Cog, emoji='💵'):
         await ctx.respond(embed=embed, ephemeral=True)  # responding user
 
     @slash_command(name='buy')
-    @option('Product ID', description='Enter the id of the product you wanna buy!')
-    async def buy(self, ctx: discord.ApplicationContext, product_id: discord.Option(str, choices=['python'])):
+    @option('Product ID', description='Enter the id of the product you wanna buy!', required=True)
+    async def buy(self, ctx: discord.ApplicationContext, product_id: int):
+        roles: list = Config.get_config('economy')['shop-roles']
+
+        guild = ctx.guild
+        product = roles[product_id - 1]
+        role = discord.utils.get(guild.roles, id=product[0])
+        current_money = EconomyManager.get_coins(user_id=ctx.user.id, method='bank')
+
+        if current_money < product[1]:
+            await ctx.respond('You have to less money!', ephemeral=True)
+            return
+
+        if role in ctx.user.roles:
+            await ctx.respond('You already bought this role ;)', ephemeral=True)
+            return
+
+        EconomyManager.remove_coins(user_id=ctx.user.id, amount=product[1], method='bank')
+        await ctx.user.add_roles(role)
+        await ctx.respond(f'You successfully bought the role: {role.mention}')
 
     @slash_command(name='slots', description='Play some slots, bro!')
     @option(name='Amount', required=True, description='Select the amount you wanna play with!')
