@@ -227,6 +227,23 @@ class Economy(ezcord.Cog, emoji='💵'):
         EconomyManager.add_coins(user_id=ctx.user.id, method='bank', amount=amount)
         await ctx.respond("The money was successfully deposited.", ephemeral=True)
 
+    @slash_command(name='pay', description='Pay some money!')
+    @option('user', description='Choose a user!', required=True)
+    @option('amount', description='The amount of the money!')
+    async def pay(self, ctx: discord.ApplicationContext, user: discord.User, amount: int):
+        current_bank_coins = EconomyManager.get_coins(ctx.user.id, 'bank')
+
+        if current_bank_coins < amount:
+            await ctx.respond("Can't pay money: To less money on the bank!", ephemeral=True)
+            return
+        if amount <= 0:
+            await ctx.respond("You can't pay less than 1 <:souls:1266390733821317230>", ephemeral=True)
+            return
+
+        EconomyManager.remove_coins(ctx.user.id, amount=amount, method='bank')
+        EconomyManager.add_coins(user_id=user.id, amount=amount, method='bank')
+        await ctx.respond(f"Your transaction to the account of {user.mention} was successful!")
+
 
 # setup for the cog
 def setup(bot):
