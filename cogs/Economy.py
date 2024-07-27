@@ -133,11 +133,13 @@ class Economy(ezcord.Cog, emoji='💵'):
         # list for role: id, prize, function
         roles = Config.get_config('economy')['shop-roles']
         description = ""
+        shop_id = 1
 
         for role in roles:
             guild = ctx.guild
             get_role = discord.utils.get(guild.roles, id=role[0])
-            description += f"\n{get_role.mention}: `{role[1]}` <:souls:1266390733821317230>"
+            description += f"\n`{shop_id}.`{get_role.mention}: `{role[1]}` <:souls:1266390733821317230>"
+            shop_id += 1
 
         embed = discord.Embed(  # embed
             title='<:home:1264678646531227751> › Soul Shop',
@@ -147,6 +149,10 @@ class Economy(ezcord.Cog, emoji='💵'):
         )
         embed.set_footer(text='Coding Soul - Economy', icon_url=Config.get_config('footer')['icon-url'])  # set footer
         await ctx.respond(embed=embed, ephemeral=True)  # responding user
+
+    @slash_command(name='buy')
+    @option('Product ID', description='Enter the id of the product you wanna buy!')
+    async def buy(self, ctx: discord.ApplicationContext, product_id: discord.Option(str, choices=['python'])):
 
     @slash_command(name='slots', description='Play some slots, bro!')
     @option(name='Amount', required=True, description='Select the amount you wanna play with!')
