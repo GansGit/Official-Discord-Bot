@@ -129,20 +129,27 @@ class Economy(ezcord.Cog, emoji='💵'):
 
     @slash_command(name='shop', description='Check the shop!')
     async def shop(self, ctx: discord.ApplicationContext):
+        # list for role: id, prize, function
+        roles = Config.get_config('economy')['shop-roles']
+        description = ""
+
+        for role in roles:
+            guild = ctx.guild
+            get_role = discord.utils.get(guild.roles, id=role[0])
+            description += f"\n{get_role.mention}: `{role[1]}` <:souls:1266390733821317230>"
+
         embed = discord.Embed(  # embed
             title='<:home:1264678646531227751> › Soul Shop',
             color=discord.Color.orange(),
+            description=description,
             timestamp=datetime.datetime.now()
         )
-        embed.add_field(  # adding field to embed
-            name=':chicken: • Chicken Wings',
-            value='500 Souls'
-        )
         embed.set_footer(text='Coding Soul - Economy', icon_url=Config.get_config('footer')['icon-url'])  # set footer
-        await ctx.respond(embed=embed)  # responding user
+        await ctx.respond(embed=embed, ephemeral=True)  # responding user
 
     @slash_command(name='slots', description='Play some slots, bro!')
     @option(name='Amount', required=True, description='Select the amount you wanna play with!')
+    @commands.cooldown(1, 7, commands.BucketType.user)  # cooldown
     async def slots(self, ctx: discord.ApplicationContext, amount: int):
 
         current_coins = EconomyManager.get_coins(ctx.user.id, method='wallet')
